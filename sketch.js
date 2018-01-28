@@ -1,34 +1,54 @@
 
-
 var Engine = Matter.Engine;
 var World = Matter.World;
 var Bodies = Matter.Bodies;
 var Body = Matter.Body;
 
 var playerPos = {x: 780, y: 200, h: 120};
-
+var ourball = {x: 400, y: 300, r: 25};
 var mouseSens = 50;
 
 //don't need to set Static to true if no gravity.y!
-var wall = Bodies.rectangle(10, 0, 20, 800);
+var wall1 = Bodies.rectangle(10, 0, 20, 800, { isStatic: true });
+var wall2 = Bodies.rectangle(10, 0, 800, 20, { isStatic: true });
+var wall3 = Bodies.rectangle(10, 590, 800, 20, { isStatic: true });
+wall2.h = 20;
+wall2.w = 800;
+wall3.h = 20;
+wall3.w = 800;
+wall1.h = 800;
+wall1.w = 20;
+var walls = [wall1, wall2, wall3];
+
 var player = Bodies.rectangle(playerPos.x, playerPos.y, 20, playerPos.h);
 
+var ball = Bodies.circle(ourball.x, ourball.y, ourball.r, { friction: 0 });
 
+//SET UP:
 function setup() {
   var can = createCanvas(800, 600);
   var engine = Engine.create();
   var world = engine.world;
-  World.add(world, [wall, player]);
+  World.add(world, [player, ball]);
+
+  for (var i=0; i < walls.length; i++) {
+    World.add(world, walls[i]);
+  }
   Engine.run(engine);
-  // console.log(wall);
   world.gravity.y = 0;
+
+  Body.setVelocity(ball, {x:5, y: 1});
+
 }
 
+//DRAW:
 function draw() {
   background(200);
-  rect(wall.position.x, wall.position.y, 20, 800);
-  // rect(playerPos.x, playerPos.y, 20, playerPos.h);
-  // console.log(player.position.y);
+  for (var i=0; i < walls.length; i++) {
+    rect(walls[i].position.x, walls[i].position.y, walls[i].w, walls[i].h);
+  }
+
+  ellipse(ball.position.x, ball.position.y, ourball.r, ourball.r);
 
   var playerCenter = playerPos.y + playerPos.h/2;
   var distance = Math.abs(mouseY - playerCenter);
@@ -38,7 +58,6 @@ function draw() {
   } else if (mouseY < playerCenter) {
     Body.setVelocity(player, {x:0, y: -distance / mouseSens});
   }
-  // console.log(mouseY, playerPos.y + playerPos.h / 2);
-  // console.log(player.position.y);
+
   rect(player.position.x, player.position.y, 20, playerPos.h);
 }
