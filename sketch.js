@@ -3,6 +3,9 @@ var Engine = Matter.Engine;
 var World = Matter.World;
 var Bodies = Matter.Bodies;
 var Body = Matter.Body;
+var MouseConstraint = Matter.MouseConstraint;
+var Mouse = Matter.Mouse;
+
 
 var playerPos = {x: 780, y: 200, h: 120};
 var ourball = {x: 400, y: 300, r: 25};
@@ -20,13 +23,15 @@ wall1.h = 800;
 wall1.w = 20;
 var walls = [wall1, wall2, wall3];
 
-var player = Bodies.rectangle(playerPos.x, playerPos.y, 20, playerPos.h);
+var player = Bodies.rectangle(playerPos.x, playerPos.y, 20, playerPos.h, { frictionAir: 0, friction: 0, restitution: 1 });
 
-var ball = Bodies.circle(ourball.x, ourball.y, ourball.r, { friction: 0 });
+var ball = Bodies.circle(ourball.x, ourball.y, ourball.r, { frictionAir: 0, friction: 0, restitution: 1 });
 
 //SET UP:
 function setup() {
   var can = createCanvas(800, 600);
+
+
   var engine = Engine.create();
   var world = engine.world;
   World.add(world, [player, ball]);
@@ -38,6 +43,17 @@ function setup() {
   world.gravity.y = 0;
 
   Body.setVelocity(ball, {x:5, y: 1});
+
+
+  var mouse = Mouse.create(can.elt);
+  mouse.pixelRatio = pixelDensity();
+  
+
+  var m = MouseConstraint.create(engine, { mouse: mouse });
+
+  World.add(world, m);
+
+
 
 }
 
