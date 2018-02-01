@@ -10,17 +10,18 @@ var playerPos = {x: 780, y: 200, h: 120};
 var ourball = {x: 400, y: 300, r: 25};
 // var mouseSens = 50;
 
-//don't need to set Static to true if no gravity.y!
-var wall1 = Bodies.rectangle(10, 0, 20, 800, { isStatic: true });
-var wall2 = Bodies.rectangle(10, 0, 800, 20, { isStatic: true });
-var wall3 = Bodies.rectangle(10, 590, 800, 20, { isStatic: true });
-//how strange....
+// need to refer to the *center* of the figure here:
+var wall1 = Bodies.rectangle(20, 300, 40, 600, { isStatic: true });
+var wall2 = Bodies.rectangle(400, 10, 800, 20, { isStatic: true });
+var wall3 = Bodies.rectangle(400, 590, 800, 20, { isStatic: true });
+//how strange that we need this....
+wall1.h = 600;
+wall1.w = 40;
 wall2.h = 20;
 wall2.w = 800;
 wall3.h = 20;
 wall3.w = 800;
-wall1.h = 800;
-wall1.w = 20;
+
 var walls = [wall1, wall2, wall3];
 
 var player = Bodies.rectangle(playerPos.x, playerPos.y, 20, playerPos.h, { frictionAir: 0, friction: 0, restitution: 1, isStatic: true });
@@ -34,6 +35,7 @@ function setup() {
   var engine = Engine.create();
   var world = engine.world;
   World.add(world, [player, ball]);
+  // World.add(world, box1);
 
   for (var i=0; i < walls.length; i++) {
     World.add(world, walls[i]);
@@ -43,6 +45,7 @@ function setup() {
 
   //i forgot how sensitive this was:
   Body.applyForce(ball, {x: ourball.x, y: ourball.y}, {x:0.03, y: 0.01});
+  // Body.applyForce(ball, {x: ourball.x, y: ourball.y}, {x:-0.01, y: -0.01});
 
   var mouse = Mouse.create(can.elt);
   mouse.pixelRatio = pixelDensity();
@@ -52,10 +55,9 @@ function setup() {
 
 //DRAW:
 function draw() {
-  // console.log(mouseX, mouseY);
   background(200);
   for (var i=0; i < walls.length; i++) {
-    rect(walls[i].position.x, walls[i].position.y, walls[i].w, walls[i].h);
+    rect(walls[i].position.x - walls[i].w/2, walls[i].position.y - walls[i].h/2, walls[i].w, walls[i].h);
   }
 
   ellipse(ball.position.x, ball.position.y, ourball.r, ourball.r);
