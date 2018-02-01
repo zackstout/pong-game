@@ -8,6 +8,11 @@ var Mouse = Matter.Mouse;
 
 var playerPos = {x: 780, y: 200, h: 120};
 var ourball = {x: 400, y: 300, r: 25};
+
+var pColor = getRandomColor();
+var bColor = getRandomColor();
+var wColor = getRandomColor();
+
 // var mouseSens = 50;
 
 // need to refer to the *center* of the figure here:
@@ -25,7 +30,7 @@ wall3.w = 800;
 
 var walls = [wall1, wall2, wall3];
 
-var player = Bodies.rectangle(playerPos.x, playerPos.y, 20, playerPos.h, { frictionAir: 0, friction: 0, restitution: 1, isStatic: true });
+var player = Bodies.rectangle(playerPos.x, playerPos.y, 10, playerPos.h, { frictionAir: 0, friction: 0, restitution: 1, isStatic: true });
 
 var ball = Bodies.circle(ourball.x, ourball.y, ourball.r, { frictionAir: 0, friction: 0, restitution: 1 });
 
@@ -57,18 +62,33 @@ function setup() {
 //DRAW:
 function draw() {
   background(200);
+
   for (var i=0; i < walls.length; i++) {
+    fill(wColor);
     rect(walls[i].position.x - walls[i].w/2, walls[i].position.y - walls[i].h/2, walls[i].w, walls[i].h);
   }
-
+  fill(bColor);
   ellipse(ball.position.x, ball.position.y, ourball.r, ourball.r);
+  // whoooa this generates a pretty nuts flashy effect:
+  // var color1 = getRandomColor();
+  // fill(color1);
+  // var playerCenter = playerPos.y + playerPos.h/2;
+  var playerCenter = playerPos.y;
 
-  var playerCenter = playerPos.y + playerPos.h/2;
-  var distance = Math.abs(mouseY - playerCenter);
+  // var distance = Math.abs(mouseY - playerCenter);
 
   if (mouseY > 0 && mouseY < 500) {
     Body.setPosition(player, {x: 780, y: mouseY});
   }
+  fill(pColor);
+  rect(player.position.x - 10, player.position.y - playerPos.h/2, 20, playerPos.h);
+}
 
-  rect(player.position.x, player.position.y, 20, playerPos.h);
+function getRandomColor() {
+  var letters = '0123456789ABCDEF';
+  var color = '#';
+  for (var i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
 }
