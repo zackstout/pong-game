@@ -11,9 +11,10 @@ var ourball = {x: 400, y: 300, r: 25};
 // var mouseSens = 50;
 
 // need to refer to the *center* of the figure here:
-var wall1 = Bodies.rectangle(20, 300, 40, 600, { isStatic: true });
-var wall2 = Bodies.rectangle(400, 10, 800, 20, { isStatic: true });
-var wall3 = Bodies.rectangle(400, 590, 800, 20, { isStatic: true });
+// i'm not sure why we need to slim down the widths/heights respectively here to avoid gap between p5 and matter...Feels like a hack.s
+var wall1 = Bodies.rectangle(20, 300, 20, 600, { isStatic: true });
+var wall2 = Bodies.rectangle(400, 10, 800, 10, { isStatic: true });
+var wall3 = Bodies.rectangle(400, 590, 800, 10, { isStatic: true });
 //how strange that we need this....
 wall1.h = 600;
 wall1.w = 40;
