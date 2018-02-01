@@ -23,9 +23,11 @@ wall1.h = 800;
 wall1.w = 20;
 var walls = [wall1, wall2, wall3];
 
-var player = Bodies.rectangle(playerPos.x, playerPos.y, 20, playerPos.h, { frictionAir: 0, friction: 0, restitution: 1 });
+var player = Bodies.rectangle(playerPos.x, playerPos.y, 20, playerPos.h, { frictionAir: 0, friction: 0, restitution: 1, isStatic: true });
 
 var ball = Bodies.circle(ourball.x, ourball.y, ourball.r, { frictionAir: 0, friction: 0, restitution: 1 });
+
+
 
 //SET UP:
 function setup() {
@@ -47,18 +49,13 @@ function setup() {
 
   var mouse = Mouse.create(can.elt);
   mouse.pixelRatio = pixelDensity();
-  
-
   var m = MouseConstraint.create(engine, { mouse: mouse });
-
   World.add(world, m);
-
-
-
 }
 
 //DRAW:
 function draw() {
+  // console.log(mouseX, mouseY);
   background(200);
   for (var i=0; i < walls.length; i++) {
     rect(walls[i].position.x, walls[i].position.y, walls[i].w, walls[i].h);
@@ -69,10 +66,13 @@ function draw() {
   var playerCenter = playerPos.y + playerPos.h/2;
   var distance = Math.abs(mouseY - playerCenter);
 
-  if (mouseY > playerCenter) {
-    Body.setVelocity(player, {x:0, y: distance / mouseSens});
-  } else if (mouseY < playerCenter) {
-    Body.setVelocity(player, {x:0, y: -distance / mouseSens});
+  // if (mouseY > playerCenter) {
+  //   Body.setVelocity(player, {x:0, y: distance / mouseSens});
+  // } else if (mouseY < playerCenter) {
+  //   Body.setVelocity(player, {x:0, y: -distance / mouseSens});
+  // }
+  if (mouseY > 0 && mouseY < 500) {
+    Body.setPosition(player, {x: 780, y: mouseY});
   }
 
   rect(player.position.x, player.position.y, 20, playerPos.h);
