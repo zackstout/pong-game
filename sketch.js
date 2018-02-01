@@ -6,15 +6,15 @@ var Body = Matter.Body;
 var MouseConstraint = Matter.MouseConstraint;
 var Mouse = Matter.Mouse;
 
-
 var playerPos = {x: 780, y: 200, h: 120};
 var ourball = {x: 400, y: 300, r: 25};
-var mouseSens = 50;
+// var mouseSens = 50;
 
 //don't need to set Static to true if no gravity.y!
 var wall1 = Bodies.rectangle(10, 0, 20, 800, { isStatic: true });
 var wall2 = Bodies.rectangle(10, 0, 800, 20, { isStatic: true });
 var wall3 = Bodies.rectangle(10, 590, 800, 20, { isStatic: true });
+//how strange....
 wall2.h = 20;
 wall2.w = 800;
 wall3.h = 20;
@@ -28,12 +28,9 @@ var player = Bodies.rectangle(playerPos.x, playerPos.y, 20, playerPos.h, { frict
 var ball = Bodies.circle(ourball.x, ourball.y, ourball.r, { frictionAir: 0, friction: 0, restitution: 1 });
 
 
-
 //SET UP:
 function setup() {
   var can = createCanvas(800, 600);
-
-
   var engine = Engine.create();
   var world = engine.world;
   World.add(world, [player, ball]);
@@ -44,8 +41,8 @@ function setup() {
   Engine.run(engine);
   world.gravity.y = 0;
 
-  Body.setVelocity(ball, {x:5, y: 1});
-
+  //i forgot how sensitive this was:
+  Body.applyForce(ball, {x: ourball.x, y: ourball.y}, {x:0.03, y: 0.01});
 
   var mouse = Mouse.create(can.elt);
   mouse.pixelRatio = pixelDensity();
@@ -66,11 +63,6 @@ function draw() {
   var playerCenter = playerPos.y + playerPos.h/2;
   var distance = Math.abs(mouseY - playerCenter);
 
-  // if (mouseY > playerCenter) {
-  //   Body.setVelocity(player, {x:0, y: distance / mouseSens});
-  // } else if (mouseY < playerCenter) {
-  //   Body.setVelocity(player, {x:0, y: -distance / mouseSens});
-  // }
   if (mouseY > 0 && mouseY < 500) {
     Body.setPosition(player, {x: 780, y: mouseY});
   }
